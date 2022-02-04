@@ -23,4 +23,8 @@ public class Jogo implements Comparable<Jogo>{
     public int compareTo(Jogo o) {
         return 0;
     }
+
+    public String formatarJogo() {
+        return data + ": " + timeMandante + " " + placar1 + " x " + placar2 + " " + timeDesafiante;
+    }
 }
