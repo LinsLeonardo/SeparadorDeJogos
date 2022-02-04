@@ -5,6 +5,7 @@ import com.opencsv.CSVWriter;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -14,9 +15,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class LeitorArquivo {
 
-    public static final String ARQUIVO = "CollectionsClubs.csv";
+//    public static final String ARQUIVO = "CollectionsClubs.csv";
+    public static final String ARQUIVO = "santander811matchesResult.csv";
     public static String PATH;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     Set<Jogo> jogos = new TreeSet<>(Comparator.comparing(Jogo::getData).thenComparing(Jogo::getTimeMandante)
             .thenComparing(Jogo::getTimeDesafiante));
@@ -29,10 +33,14 @@ public class LeitorArquivo {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] detalhes = line.split(";");
 
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//                Integer.parseInt(detalhes[3]);
+//                LocalDate.parse(detalhes[4], formatter)
+//                System.out.println(detalhes[4]);
 
-                if(detalhes[0].intern() != "time mandante"){
+                if(detalhes[0].intern() != "time_1(mandante)"){
                     Jogo jogo = new Jogo(detalhes[0], detalhes[1], Integer.parseInt(detalhes[2]),
-                            Integer.parseInt(detalhes[3]), LocalDate.parse(detalhes[4], formatter));
+                            Integer.parseInt(detalhes[3]), LocalDate.parse(detalhes[4]));
                     jogos.add(jogo);
 
                 }
