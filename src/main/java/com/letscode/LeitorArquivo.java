@@ -5,7 +5,6 @@ import com.opencsv.CSVWriter;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.CollationElementIterator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -31,9 +30,13 @@ public class LeitorArquivo {
                 String[] detalhes = line.split(";");
 
 
-                Jogo jogo = new Jogo(detalhes[0], detalhes[1], Integer.parseInt(detalhes[2]),
-                        Integer.parseInt(detalhes[3]), LocalDate.parse(detalhes[4], formatter));
-                jogos.add(jogo);
+                if(detalhes[0].intern() != "time mandante"){
+                    Jogo jogo = new Jogo(detalhes[0], detalhes[1], Integer.parseInt(detalhes[2]),
+                            Integer.parseInt(detalhes[3]), LocalDate.parse(detalhes[4], formatter));
+                    jogos.add(jogo);
+
+                }
+
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
