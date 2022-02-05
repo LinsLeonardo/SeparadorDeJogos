@@ -36,7 +36,7 @@ public class Jogo implements Comparable<Jogo>{
             return ResultadoJogo.EMPATE;
         if ((placar1 < placar2 && timeMandante == time.getNome().intern()) || (placar1 > placar2 && timeDesafiante == time.getNome().intern()))
             return ResultadoJogo.DERROTA;
-        else
-            return ResultadoJogo.NAO_INCLUIDO;
+
+        return ResultadoJogo.NAO_INCLUIDO;
     }
 }
