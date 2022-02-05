@@ -15,17 +15,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class LeitorArquivo {
 
-//    public static final String ARQUIVO = "CollectionsClubs.csv";
     public static final String ARQUIVO = "santander811matchesResult.csv";
-    public static String PATH;
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
 
     Set<Jogo> jogos = new TreeSet<>(Comparator.comparing(Jogo::getData).thenComparing(Jogo::getTimeMandante)
             .thenComparing(Jogo::getTimeDesafiante));
-//    ArrayList<Jogo>  jogos = new ArrayList<>();
-
 
     public void leitorArquivo() throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(ARQUIVO, UTF_8))) {
@@ -33,18 +26,11 @@ public class LeitorArquivo {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] detalhes = line.split(";");
 
-//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                Integer.parseInt(detalhes[3]);
-//                LocalDate.parse(detalhes[4], formatter)
-//                System.out.println(detalhes[4]);
-
                 if(detalhes[0].intern() != "time_1(mandante)"){
                     Jogo jogo = new Jogo(detalhes[0], detalhes[1], Integer.parseInt(detalhes[2]),
                             Integer.parseInt(detalhes[3]), LocalDate.parse(detalhes[4]));
                     jogos.add(jogo);
-
                 }
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -52,15 +38,8 @@ public class LeitorArquivo {
             e.printStackTrace();
         }
 
-//        for (Jogo jogo : jogos){
-//            if(jogo.getTimeDesafiante().intern() != jogo.getTimeMandante().intern() && (jogo.getTimeMandante().toLowerCase().intern() == "sport" || jogo.getTimeDesafiante().toLowerCase().intern() == "sport")) {
-//                jogo.formatarJogo();
-//            }
-//        }
-
         Map<String, List<Jogo>> timesAgrupados = jogos.stream().collect(Collectors.groupingBy(Jogo::getTimeMandante));
 
-//        System.out.println(timesAgrupados.values());
         List<Time> listaResultados = new ArrayList();
 
         for (String time : timesAgrupados.keySet()) {
@@ -76,23 +55,26 @@ public class LeitorArquivo {
             gravarArq.println();
 
             for (Jogo jogo : jogos) {
+                ResultadoJogo resultado = jogo.verificarResultado(timeAtual);
 
                 if (jogo.getTimeDesafiante().intern() != jogo.getTimeMandante().intern() && (jogo.getTimeMandante().intern() == time.intern() || jogo.getTimeDesafiante().intern() == time.intern())) {
+                  //if (resultado != ResultadoJogo.NAO_INCLUIDO) {
                     gravarArq.println(jogo.formatarJogo());
 
-                    if(jogo.getPlacar1() == jogo.getPlacar2()) {
+                    if(resultado == ResultadoJogo.EMPATE) {
                         timeAtual.setEmpates(timeAtual.getEmpates() + 1);
                         timeAtual.setPontos(timeAtual.getPontos() + 1);
-                    } else if((jogo.getPlacar1() > jogo.getPlacar2() && jogo.getTimeMandante().intern() == time.intern()) || (jogo.getPlacar1() < jogo.getPlacar2() && jogo.getTimeDesafiante().intern() == time.intern())) {
+                    }
+                    if(resultado == ResultadoJogo.VITORIA) {
                         timeAtual.setVitorias(timeAtual.getVitorias() + 1);
                         timeAtual.setPontos(timeAtual.getPontos() + 3);
-                    } else {
+                    }
+                    if(resultado == ResultadoJogo.DERROTA){
                         timeAtual.setDerrotas(timeAtual.getDerrotas() + 1);
                     }
                 }
-
-
             }
+
             arq.close();
             System.out.println("Arquivo criado do " + time + " com sucesso");
             System.out.println("-------------------------------------------");
@@ -101,8 +83,6 @@ public class LeitorArquivo {
         }
 
         Collections.sort(listaResultados);
-
-
 
         Writer tabelaCampeonato = Files.newBufferedWriter(Paths.get("tabela-do-campeonato.csv"));
         CSVWriter escreverCSV = new CSVWriter(tabelaCampeonato);
