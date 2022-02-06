@@ -29,14 +29,18 @@ public class Jogo implements Comparable<Jogo>{
         return data.format(formatter) + ": " + timeMandante + " " + placar1 + " x " + placar2 + " " + timeDesafiante;
     }
 
-    public ResultadoJogo verificarResultado(Time time){
-        if ((placar1 > placar2 && timeMandante == time.getNome().intern()) || (placar1 < placar2 && timeDesafiante == time.getNome().intern()))
-            return ResultadoJogo.VITORIA;
-        if((placar1 == placar2) && timeMandante == time.getNome().intern() || timeDesafiante == time.getNome().intern())
-            return ResultadoJogo.EMPATE;
-        if ((placar1 < placar2 && timeMandante == time.getNome().intern()) || (placar1 > placar2 && timeDesafiante == time.getNome().intern()))
-            return ResultadoJogo.DERROTA;
 
+    public ResultadoJogo verificarResultado(Jogo jogo){
+        if(jogo.getPlacar1() == jogo.getPlacar2()){
+            return ResultadoJogo.EMPATE;
+        }
+        if ((jogo.getPlacar1() > jogo.getPlacar2())){
+            return ResultadoJogo.VITORIA;
+        }
+        if(jogo.getPlacar1() < jogo.getPlacar2()) {
+            return ResultadoJogo.DERROTA;
+        }
         return ResultadoJogo.NAO_INCLUIDO;
     }
+
 }

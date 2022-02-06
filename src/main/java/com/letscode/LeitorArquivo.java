@@ -55,7 +55,8 @@ public class LeitorArquivo {
             gravarArq.println();
 
             for (Jogo jogo : jogos) {
-                ResultadoJogo resultado = jogo.verificarResultado(timeAtual);
+                ResultadoJogo resultado = jogo.verificarResultado(jogo);
+
 
                 if (jogo.getTimeDesafiante().intern() != jogo.getTimeMandante().intern() && (jogo.getTimeMandante().intern() == time.intern() || jogo.getTimeDesafiante().intern() == time.intern())) {
                   //if (resultado != ResultadoJogo.NAO_INCLUIDO) {
