@@ -55,11 +55,10 @@ public class LeitorArquivo {
             gravarArq.println();
 
             for (Jogo jogo : jogos) {
-                ResultadoJogo resultado = jogo.verificarResultado(jogo);
-
+                ResultadoJogo resultado = jogo.verificarResultado(timeAtual);
 
                 if (jogo.getTimeDesafiante().intern() != jogo.getTimeMandante().intern() && (jogo.getTimeMandante().intern() == time.intern() || jogo.getTimeDesafiante().intern() == time.intern())) {
-                  //if (resultado != ResultadoJogo.NAO_INCLUIDO) {
+                    //if (resultado != ResultadoJogo.NAO_INCLUIDO) {
                     gravarArq.println(jogo.formatarJogo());
 
                     if(resultado == ResultadoJogo.EMPATE) {
@@ -75,7 +74,6 @@ public class LeitorArquivo {
                     }
                 }
             }
-
             arq.close();
             System.out.println("Arquivo criado do " + time + " com sucesso");
             System.out.println("-------------------------------------------");
